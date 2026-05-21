@@ -1,0 +1,26 @@
+# Source files (not needed for website)
+中考数学/
+*.docx
+*.py
+*.pyc
+
+# Build artifacts
+questions_output.json
+questions_data.json
+extracted_*.json
+full_data.json
+zhenti_data.json
+garbled_report.md
+
+# Temp files
+/tmp/
+*.tmp
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

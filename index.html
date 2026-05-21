@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>中考数学速查手册</title>
+<style>
+/* ===================== Reset & Base ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf8f5;
+  --surface: #ffffff;
+  --text-primary: #1d1d1f;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --border: #e5e5e5;
+  --accent: #1e3a5f;
+  --accent-light: #e8edf3;
+  --accent-hover: #162d4a;
+  --tag-bg: #eef2f6;
+  --tag-text: #374151;
+  --danger: #b91c1c;
+  --danger-bg: #fef2f2;
+  --success: #047857;
+  --success-bg: #f0fdf4;
+  --orange: #b45309;
+  --orange-bg: #fffbeb;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.10);
+  --max-w: 720px;
+  --header-h: 56px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro SC", "SF Pro Text", "PingFang SC", "Noto Sans SC", "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.7;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===================== Header ===================== */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+}
+
+.header .back-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+}
+.header .back-btn:hover { background: var(--accent-light); }
+.header .back-btn.visible { display: flex; }
+
+.header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.header .mode-toggle {
+  font-size: 13px;
+  padding: 5px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.header .mode-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.header .mode-toggle.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* ===================== Container ===================== */
+.container {
+  flex: 1;
+  max-width: var(--max-w);
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 16px;
+  padding-bottom: calc(20px + var(--safe-bottom));
+}
+
+/* ===================== Page visibility ===================== */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ===================== Home Page ===================== */
+.home-intro {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.home-intro h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.home-intro p {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* Tag Search */
+.search-wrap {
+  margin-bottom: 24px;
+}
+.search-wrap label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.search-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  font-family: inherit;
+}
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(30,58,95,0.10);
+}
+.search-input::placeholder { color: var(--text-tertiary); }
+
+.search-results {
+  margin-top: 12px;
+  display: none;
+}
+.search-results.visible { display: block; }
+.search-results-count {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+.search-result-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+.search-result-item:hover { border-color: var(--accent); }
+.search-result-item .sr-source {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+.search-result-item .sr-text {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin: 2px 0 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.search-result-item .sr-category {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+
+/* Category Grid */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+.category-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 14px 14px;
+  cursor: pointer;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.category-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+.category-card:active {
+  transform: scale(0.98);
+}
+.category-card .cat-num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.1;
+}
+.category-card .cat-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.category-card .cat-count {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  background: var(--tag-bg);
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+
+/* ===================== List Page (速查模式) ===================== */
+.list-header {
+  margin-bottom: 20px;
+}
+.list-header .list-cat-num {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+.list-header .list-cat-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.list-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.list-action-btn {
+  padding: 7px 14px;
+  font-size: 13px;
+  border: 1px solid var(--accent);
+  border-radius: 18px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.list-action-btn:hover { background: var(--accent-hover); }
+.list-action-btn:active { transform: scale(0.97); }
+.list-action-btn.secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+.list-action-btn.secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.list-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.list-filter-btn {
+  padding: 4px 12px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: inherit;
+}
+.list-filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.list-filter-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.question-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: box-shadow var(--transition);
+}
+.question-card:hover { box-shadow: var(--shadow-sm); }
+
+.qc-header {
+  padding: 14px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.qc-header .qc-arrow {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition);
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+.qc-header .qc-arrow.open { transform: rotate(90deg); }
+.qc-header .qc-info {
+  flex: 1;
+  min-width: 0;
+}
+.qc-header .qc-source {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 2px;
+}
+.qc-header .qc-preview {
+  font-size: 14px;
+  color: var(--text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+/* Question Expandable Body */
+.qc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.25s ease;
+}
+.qc-body.open {
+  max-height: 2000px;
+}
+.qc-body-inner {
+  padding: 0 16px 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+.qb-section {
+  margin-bottom: 14px;
+}
+.qb-section:last-child { margin-bottom: 0; }
+.qb-section .qb-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+.qb-section .qb-text {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Math/geometry images */
+.formula-text {
+  display: inline;
+  font-family: 'Times New Roman', 'STIX Two Math', serif;
+  font-style: italic;
+  padding: 0 2px;
+  user-select: text;
+  cursor: text;
+}
+.math-img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+  display: inline-block;
+  margin: 4px 0;
+  border-radius: 4px;
+}
+.pc-text img.math-img {
+  display: block;
+  margin: 12px auto;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  max-height: 800px;
+  min-width: 280px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  padding: 4px;
+  cursor: zoom-in;
+  transition: transform 0.2s;
+}
+.pc-text img.math-img:active {
+  transform: scale(1.5);
+  transform-origin: top left;
+}
+
+/* Tags */
+.qb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.qb-tag {
+  font-size: 12px;
+  padding: 2px 10px;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.qb-tag:hover { background: var(--accent-light); color: var(--accent); }
+
+/* Pitfalls */
+.qb-pitfall {
+  font-size: 13px;
+  color: var(--danger);
+  background: var(--danger-bg);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  line-height: 1.6;
+}
+
+/* Strategy */
+.qb-strategy {
+  font-size: 13px;
+  color: var(--orange);
+  background: var(--orange-bg);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  line-height: 1.6;
+}
+
+/* Answer */
+.qb-answer-wrap {
+  position: relative;
+}
+.qb-answer-toggle {
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: none;
+  padding: 4px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background var(--transition);
+  margin-bottom: 8px;
+}
+.qb-answer-toggle:hover { background: #d1dde9; }
+.qb-answer {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.qb-answer.hidden { display: none; }
+
+/* Enter practice btn */
+.enter-practice-btn {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  padding: 5px 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background var(--transition);
+}
+.enter-practice-btn:hover { background: var(--accent-hover); }
+
+/* ===================== Practice Mode (刷题模式) ===================== */
+.practice-page {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: var(--bg);
+  display: none;
+  flex-direction: column;
+}
+.practice-page.active { display: flex; }
+
+/* Practice Header */
+.practice-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.practice-header .ph-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+}
+.practice-header .ph-back:hover { background: var(--accent-light); }
+
+.practice-header .ph-home-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 17px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+}
+.practice-header .ph-home-btn:hover { background: var(--accent-light); color: var(--accent); }
+
+.practice-header .ph-info {
+  flex: 1;
+  min-width: 0;
+}
+.practice-header .ph-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.practice-header .ph-progress {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+.practice-header .ph-bookmark {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+.practice-header .ph-bookmark:hover { background: var(--accent-light); }
+.practice-header .ph-bookmark.saved { color: #eab308; }
+
+/* Practice Content */
+.practice-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 16px;
+  padding-bottom: 0;
+}
+
+.pc-question {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.pc-question .pc-source {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+}
+
+.pc-question .pc-text {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Image placeholder */
+.pc-image-area {
+  margin: 16px 0;
+  text-align: center;
+}
+.pc-image-area img {
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.pc-image-area .img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  background: var(--tag-bg);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+/* Reveal area */
+.pc-reveal-area {
+  margin-bottom: 16px;
+}
+
+.pc-reveal-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background var(--transition);
+}
+.pc-reveal-btn:hover { background: var(--accent-hover); }
+.pc-reveal-btn:active { transform: scale(0.99); }
+
+/* Answer detail */
+.pc-detail {
+  display: none;
+}
+.pc-detail.revealed { display: block; }
+
+.pc-detail-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+}
+.pc-detail-section .ds-icon { font-size: 16px; }
+
+.pc-detail-section .ds-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.pc-detail-section .ds-body {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Answer section specific */
+.pc-detail-section.answer-section {
+  border-left: 3px solid var(--accent);
+}
+
+/* Strategy section */
+.pc-detail-section.strategy-section {
+  border-left: 3px solid var(--orange);
+  background: var(--orange-bg);
+}
+
+/* Pitfall section */
+.pc-detail-section.pitfall-section {
+  border-left: 3px solid var(--danger);
+  background: var(--danger-bg);
+}
+
+/* Tags section */
+.pc-detail-section.tags-section {
+  border-left: 3px solid var(--text-tertiary);
+}
+
+/* Practice Bottom Bar */
+.practice-bottom {
+  flex-shrink: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  padding-bottom: calc(12px + var(--safe-bottom));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pb-nav-btn {
+  flex: 1;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition);
+  text-align: center;
+}
+.pb-nav-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.pb-nav-btn:active { transform: scale(0.98); }
+.pb-nav-btn.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.pb-nav-btn.primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.pb-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.pb-counter {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  text-align: center;
+  min-width: 60px;
+}
+
+/* ===================== Review Page (已看题库) ===================== */
+.review-page {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: var(--bg);
+  display: none;
+  flex-direction: column;
+}
+.review-page.active { display: flex; }
+
+.review-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.review-header .rv-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+}
+.review-header .rv-back:hover { background: var(--accent-light); }
+.review-header .rv-title {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+}
+.review-header .rv-clear {
+  font-size: 13px;
+  color: var(--danger);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 6px 12px;
+  border-radius: 16px;
+  transition: background var(--transition);
+}
+.review-header .rv-clear:hover { background: var(--danger-bg); }
+
+.review-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 16px;
+  padding-bottom: calc(20px + var(--safe-bottom));
+}
+
+.review-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-tertiary);
+}
+.review-empty .rv-empty-icon { font-size: 40px; margin-bottom: 12px; }
+.review-empty p { font-size: 14px; }
+
+/* Donation */
+.donate-btn {
+  position: fixed;
+  bottom: calc(16px + var(--safe-bottom));
+  right: 16px;
+  z-index: 45;
+  background: transparent;
+  border: none;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: color var(--transition), background var(--transition);
+  font-family: inherit;
+  letter-spacing: 0.02em;
+}
+.donate-btn:hover {
+  color: var(--accent);
+  background: rgba(30,58,95,0.06);
+}
+
+.donate-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.donate-modal-overlay.visible { display: flex; }
+
+.donate-modal {
+  background: var(--surface);
+  border-radius: 14px;
+  max-width: 340px;
+  width: 100%;
+  padding: 28px 24px 24px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.donate-modal h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.donate-modal p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+.donate-modal .donate-qr {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 16px;
+  border-radius: var(--radius-sm);
+  display: block;
+  object-fit: contain;
+}
+.donate-modal .donate-close {
+  font-size: 14px;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: none;
+  padding: 8px 24px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background var(--transition);
+}
+.donate-modal .donate-close:hover { background: #d1dde9; }
+
+/* Bottom nav in home */
+.bottom-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 10px;
+}
+.bottom-actions button {
+  flex: 1;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition);
+  text-align: center;
+}
+.bottom-actions button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.bottom-actions button .ba-icon { display: block; font-size: 20px; margin-bottom: 4px; }
+.bottom-actions button .ba-label { font-size: 12px; color: var(--text-secondary); }
+.bottom-actions button:hover .ba-label { color: var(--accent); }
+
+/* Responsive */
+@media (max-width: 480px) {
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .category-card {
+    padding: 14px 12px 12px;
+  }
+  .category-card .cat-num {
+    font-size: 24px;
+  }
+  .container {
+    padding: 16px 12px;
+    padding-bottom: calc(16px + var(--safe-bottom));
+  }
+  .qc-header { padding: 12px 14px; }
+  .qc-body-inner { padding: 0 14px 14px; padding-top: 12px; }
+  .pc-question { padding: 16px; }
+  .pc-detail-section { padding: 14px 16px; }
+  .donate-btn {
+    bottom: calc(12px + var(--safe-bottom));
+    right: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .category-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+</style>
+<script>
+MathJax = {
+  options: {
+    renderActions: {
+      addMenu: []
+    }
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/mml-chtml.js" async></script>
+</head>
+<body>
+
+<!-- ==================== Header ==================== -->
+<header class="header">
+  <button class="back-btn" id="backBtn" aria-label="返回">←</button>
+  <h1>中考数学速查手册</h1>
+  <button class="mode-toggle" id="modeToggle">📖 已看题库</button>
+</header>
+
+<div class="container">
+
+  <!-- ==================== Home Page ==================== -->
+  <div class="page active" id="homePage">
+    <div class="home-intro">
+      <h2>选题号 · 练真题</h2>
+      <p>点击题号分类，查看对应题型与解析</p>
+    </div>
+
+    <!-- Tag Search -->
+    <div class="search-wrap">
+      <label for="tagSearch">🔍 按套路标签搜索</label>
+      <input type="text" class="search-input" id="tagSearch" placeholder="例如：等腰三角形、二次函数……" autocomplete="off">
+      <div class="search-results" id="searchResults">
+        <div class="search-results-count" id="searchCount"></div>
+        <div id="searchList"></div>
+      </div>
+    </div>
+
+    <!-- Category Grid -->
+    <div class="category-grid" id="categoryGrid"></div>
+
+    <!-- Bottom actions -->
+    <div class="bottom-actions">
+      <button id="bottomPractice">
+        <span class="ba-icon">🎯</span>
+        <span class="ba-label">随机刷题</span>
+      </button>
+      <button id="bottomReview">
+        <span class="ba-icon">📚</span>
+        <span class="ba-label">已看题库 (<span id="reviewCountBadge">0</span>)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== List Page ==================== -->
+  <div class="page" id="listPage">
+    <div class="list-header">
+      <div class="list-cat-num" id="listCatNum"></div>
+      <div class="list-cat-label" id="listCatLabel"></div>
+      <div class="list-actions">
+        <button class="list-action-btn" id="listPracticeBtn">🎯 随机刷本题号</button>
+        <button class="list-action-btn secondary" id="listHomeBtn">🏠 返回首页</button>
+      </div>
+    </div>
+    <div class="list-filters" id="listFilters"></div>
+    <div id="questionList"></div>
+  </div>
+
+</div>
+
+<!-- ==================== Practice Page (刷题模式) ==================== -->
+<div class="practice-page" id="practicePage">
+  <div class="practice-header">
+    <button class="ph-back" id="practiceBack">←</button>
+    <button class="ph-home-btn" id="practiceHomeBtn">🏠</button>
+    <div class="ph-info">
+      <div class="ph-title" id="practiceTitle">#19 计算</div>
+      <div class="ph-progress"><span id="practiceIdx">1</span> / <span id="practiceTotal">3</span></div>
+    </div>
+    <button class="ph-bookmark" id="practiceBookmark" title="收藏/加入已看题库">☆</button>
+  </div>
+
+  <div class="practice-content" id="practiceContent">
+    <!-- Question -->
+    <div class="pc-question" id="pcQuestion">
+      <div class="pc-source" id="pcSource"></div>
+      <div class="pc-image-area" id="pcImageArea" style="display:none;"></div>
+      <div class="pc-text" id="pcText"></div>
+    </div>
+
+    <!-- Reveal button -->
+    <div class="pc-reveal-area">
+      <button class="pc-reveal-btn" id="pcRevealBtn">📝 查看解析与套路</button>
+    </div>
+
+    <!-- Detail sections (hidden until revealed) -->
+    <div class="pc-detail" id="pcDetail">
+
+
+      <div class="pc-detail-section strategy-section" id="pcStrategySection">
+        <div class="ds-icon">🔧</div>
+        <div class="ds-label">套路总结</div>
+        <div class="ds-body" id="pcStrategy"></div>
+      </div>
+
+      <div class="pc-detail-section pitfall-section" id="pcPitfallSection">
+        <div class="ds-icon">⚠️</div>
+        <div class="ds-label">易错点分析</div>
+        <div class="ds-body" id="pcPitfall"></div>
+      </div>
+
+      <div class="pc-detail-section tags-section" id="pcTagsSection">
+        <div class="ds-icon">🏷️</div>
+        <div class="ds-label">套路标签</div>
+        <div class="ds-body" id="pcTags"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="practice-bottom">
+    <button class="pb-nav-btn" id="pbPrev">⬅ 上一题</button>
+    <div class="pb-counter" id="pbCounter">1/3</div>
+    <button class="pb-nav-btn primary" id="pbNext">下一题 ➡</button>
+  </div>
+</div>
+
+<!-- ==================== Review Page (已看题库) ==================== -->
+<div class="review-page" id="reviewPage">
+  <div class="review-header">
+    <button class="rv-back" id="reviewBack">←</button>
+    <div class="rv-title">📚 已看题库</div>
+    <button class="rv-clear" id="reviewClear">清空</button>
+  </div>
+  <div class="review-content" id="reviewContent">
+    <div class="review-empty">
+      <div class="rv-empty-icon">📭</div>
+      <p>还没有看过题目，去刷几道吧</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Donate Button ==================== -->
+<button class="donate-btn" id="donateBtn">支持</button>
+
+<!-- ==================== Donate Modal ==================== -->
+<div class="donate-modal-overlay" id="donateModal">
+  <div class="donate-modal">
+    <h3>❤️ 支持一下</h3>
+    <p>为了妹妹中考制作，仅用于学习交流</p>
+    <p>如果好用请支持🥺</p>
+    <img src="assets/qr_donate.png" alt="收款码" class="donate-qr">
+    <button class="donate-close" id="donateClose">知道了</button>
+  </div>
+</div>
+
+<!-- Load questions data from external file (avoids 10MB+ inline data) -->
+<script src="questions_data.js"></script>
+<script>
+// ======================== LOCAL STATE ========================
+const REVIEWED_KEY = 'math_reviewed_ids';
+let reviewedIds = new Set();
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function initReviewed() {
+  try {
+    const saved = localStorage.getItem(REVIEWED_KEY);
+    if (saved) {
+      const ids = JSON.parse(saved);
+      reviewedIds = new Set(ids);
+    }
+  } catch(e) {
+    reviewedIds = new Set();
+  }
+}
+
+function saveReviewed() {
+  try {
+    localStorage.setItem(REVIEWED_KEY, JSON.stringify([...reviewedIds]));
+  } catch(e) {}
+}
+
+initReviewed();
+
+// ======================== PAGE STATE ========================
+let currentCategory = null;
+let currentPage = 'home';
+let currentFilterTag = 'all';
+let practiceMode = false;
+let practiceCategory = null;
+let practiceQuestions = [];
+let practiceIndex = 0;
+let practiceRevealed = false;
+let practiceReturnTo = 'home';
+let practiceBookmarked = false;
+let searchTimeout = null;
+
+function shuffleArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function goHome() {
+  currentCategory = null;
+  currentPage = 'home';
+  document.getElementById('homePage').classList.add('active');
+  document.getElementById('listPage').classList.remove('active');
+  document.getElementById('practicePage').classList.remove('active');
+  document.querySelector('.header').style.display = 'flex';
+  document.getElementById('donateBtn').style.display = '';
+  document.getElementById('backBtn').style.display = 'none';
+  practiceMode = false;
+}
+
+function goToCategory(num) {
+  currentCategory = num;
+  currentPage = 'list';
+  currentFilterTag = 'all';
+  document.getElementById('homePage').classList.remove('active');
+  document.getElementById('listPage').classList.add('active');
+  document.getElementById('practicePage').classList.remove('active');
+  document.getElementById('backBtn').style.display = '';
+  renderList();
+}
+
+renderHome();
+updateReviewBadge();
+
+function renderHome() {
+  const grid = document.getElementById('categoryGrid');
+  const catOrder = ['19','20','21','22','1718','24','25'];
+  grid.innerHTML = catOrder.map(num => {
+    const cat = QUESTION_CATEGORIES[num];
+    if (!cat) return '';
+    return `<div class="category-card" data-category="${num}">
+      <div class="cat-num">#${cat.num}</div>
+      <div class="cat-label">${escapeHtml(cat.label)}</div>
+      <div class="cat-count">${cat.questions.length} 题</div>
+    </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.category-card').forEach(el => {
+    el.addEventListener('click', () => goToCategory(el.dataset.category));
+  });
+}
+
+// ======================== TAG SEARCH ========================
+function performTagSearch(query) {
+  const resultsDiv = document.getElementById('searchResults');
+  const countDiv = document.getElementById('searchCount');
+  const listDiv = document.getElementById('searchList');
+
+  if (!query.trim()) {
+    resultsDiv.classList.remove('visible');
+    return;
+  }
+
+  const q = query.trim().toLowerCase();
+  const matches = [];
+
+  Object.keys(QUESTION_CATEGORIES).forEach(num => {
+    const cat = QUESTION_CATEGORIES[num];
+    cat.questions.forEach(qs => {
+      const tagMatch = qs.tags && qs.tags.some(t => t.toLowerCase().includes(q));
+      const textMatch = qs.text.toLowerCase().includes(q);
+      if (tagMatch || textMatch) {
+        matches.push({ ...qs, catNum: num, catLabel: cat.label });
+      }
+    });
+  });
+
+  if (matches.length === 0) {
+    countDiv.textContent = '没有找到匹配结果';
+    listDiv.innerHTML = '';
+    resultsDiv.classList.add('visible');
+    return;
+  }
+
+  countDiv.textContent = `找到 ${matches.length} 个结果`;
+  listDiv.innerHTML = matches.map(qs => {
+    const preview = qs.text.length > 60 ? qs.text.slice(0, 60) + '…' : qs.text;
+    return `<div class="search-result-item" data-category="${qs.catNum}" data-id="${qs.id}">
+      <div class="sr-source">${escapeHtml(qs.source)}</div>
+      <div class="sr-text">${escapeHtml(preview)}</div>
+      <span class="sr-category">#${qs.catNum} ${escapeHtml(qs.catLabel)}</span>
+    </div>`;
+  }).join('');
+  resultsDiv.classList.add('visible');
+
+  listDiv.querySelectorAll('.search-result-item').forEach(el => {
+    el.addEventListener('click', () => {
+      goToCategory(el.dataset.category);
+      setTimeout(() => {
+        const qCard = document.querySelector(`.question-card[data-id="${el.dataset.id}"]`);
+        if (qCard) {
+          qCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const body = qCard.querySelector('.qc-body');
+          const arrow = qCard.querySelector('.qc-arrow');
+          if (body && !body.classList.contains('open')) {
+            body.classList.add('open');
+            arrow.classList.add('open');
+          }
+        }
+      }, 50);
+    });
+  });
+}
+
+// ======================== LIST PAGE ========================
+function renderList() {
+  const cat = QUESTION_CATEGORIES[currentCategory];
+  if (!cat) { goHome(); return; }
+
+  document.getElementById('listCatNum').textContent = '#' + cat.num + ' ' + cat.label;
+  document.getElementById('listCatLabel').textContent = cat.questions.length + ' 道题目';
+
+  const allTags = new Set();
+  cat.questions.forEach(q => (q.tags || []).forEach(t => allTags.add(t)));
+
+  const filterDiv = document.getElementById('listFilters');
+  filterDiv.innerHTML = '<button class="list-filter-btn active" data-tag="all">全部</button>' +
+    Array.from(allTags).sort().map(t => `<button class="list-filter-btn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join('');
+
+  filterDiv.querySelectorAll('.list-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterDiv.querySelectorAll('.list-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderQuestionList(btn.dataset.tag === 'all' ? null : btn.dataset.tag);
+    });
+  });
+
+  renderQuestionList(null);
+}
+
+function renderQuestionList(filterTag) {
+  const cat = QUESTION_CATEGORIES[currentCategory];
+  if (!cat) return;
+
+  let questions = cat.questions;
+  if (filterTag) {
+    questions = questions.filter(q => (q.tags || []).includes(filterTag));
+  }
+
+  const listDiv = document.getElementById('questionList');
+
+  if (questions.length === 0) {
+    listDiv.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>该标签下暂无题目</p></div>';
+    return;
+  }
+
+  listDiv.innerHTML = questions.map(q => {
+    const preview = q.text.length > 80 ? q.text.slice(0, 80) + '…' : q.text;
+    return `<div class="question-card" data-id="${q.id}">
+      <div class="qc-header">
+        <div class="qc-arrow">▶</div>
+        <div class="qc-info">
+          <div class="qc-source">${escapeHtml(q.source)}</div>
+          <div class="qc-preview">${escapeHtml(preview)}</div>
+        </div>
+      </div>
+      <div class="qc-body">
+        <div class="qc-body-inner">
+          <div class="qb-section">
+            <div class="qb-label">📝 题目</div>
+            <div class="qb-text">${q.html ? q.html : escapeHtml(q.clean_text || q.text)}</div>
+          </div>
+          <div class="qb-section">
+            <div class="qb-label">🏷️ 套路标签</div>
+            <div class="qb-tags">
+              ${(q.tags || []).map(t => `<span class="qb-tag" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</span>`).join('')}
+            </div>
+          </div>
+          ${q.pitfalls ? `<div class="qb-section">
+            <div class="qb-label">⚠️ 易错点</div>
+            <div class="qb-pitfall">${escapeHtml(q.pitfalls)}</div>
+          </div>` : ''}
+          <button class="enter-practice-btn" data-cat="${currentCategory}" data-id="${q.id}">🎯 进入刷题模式</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Expand/collapse
+  listDiv.querySelectorAll('.qc-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const card = header.closest('.question-card');
+      const body = card.querySelector('.qc-body');
+      const arrow = card.querySelector('.qc-arrow');
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open');
+      arrow.classList.toggle('open');
+
+      // Trigger MathJax to typeset newly revealed math
+      if (body.classList.contains('open') && window.MathJax) {
+        MathJax.typesetPromise([body]);
+      }
+    });
+  });
+
+
+  // Tag click -> filter
+  listDiv.querySelectorAll('.qb-tag').forEach(tag => {
+    tag.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const t = tag.dataset.tag;
+      const filterBtns = document.getElementById('listFilters').querySelectorAll('.list-filter-btn');
+      filterBtns.forEach(b => {
+        b.classList.remove('active');
+        if (b.dataset.tag === t) b.classList.add('active');
+      });
+      renderQuestionList(t);
+    });
+  });
+
+  // Enter practice mode from list card
+  listDiv.querySelectorAll('.enter-practice-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const catKey = btn.dataset.cat;
+      const qid = btn.dataset.id;
+      startPractice(catKey, qid);
+    });
+  });
+}
+
+// ======================== PRACTICE MODE ========================
+function startPractice(catKey, startId) {
+  const cat = QUESTION_CATEGORIES[catKey];
+  if (!cat) return;
+
+  practiceMode = true;
+  practiceCategory = catKey;
+  practiceQuestions = shuffleArray(cat.questions);
+  practiceRevealed = false;
+
+  // Record where we came from for the ← button
+  practiceReturnTo = currentPage === 'list' ? 'list' : 'home';
+
+  // Find the starting index
+  practiceIndex = startId ? practiceQuestions.findIndex(q => q.id === startId) : 0;
+  if (practiceIndex < 0) practiceIndex = 0;
+
+  document.getElementById('practicePage').classList.add('active');
+  // Hide list page if visible
+  document.getElementById('listPage').classList.remove('active');
+  document.getElementById('homePage').classList.remove('active');
+  // Hide the main header and donate button
+  document.querySelector('.header').style.display = 'none';
+  document.getElementById('donateBtn').style.display = 'none';
+
+  renderPractice();
+}
+
+function renderPractice() {
+  const q = practiceQuestions[practiceIndex];
+  if (!q) return;
+
+  const cat = QUESTION_CATEGORIES[practiceCategory];
+  const totalQ = cat ? cat.questions.length : practiceQuestions.length;
+
+  // Header
+  document.getElementById('practiceTitle').textContent = `#${cat.num} ${cat.label}`;
+  document.getElementById('practiceIdx').textContent = practiceIndex + 1;
+  document.getElementById('practiceTotal').textContent = practiceQuestions.length;
+  document.getElementById('pbCounter').textContent = `${practiceIndex+1}/${practiceQuestions.length}`;
+
+  // Bookmark state
+  const isReviewed = reviewedIds.has(q.id);
+  const bookmarkBtn = document.getElementById('practiceBookmark');
+  bookmarkBtn.textContent = isReviewed ? '★' : '☆';
+  bookmarkBtn.classList.toggle('saved', isReviewed);
+
+  // Question - use clean_text (pre-stripped of 【答案】【解析】【分析】)
+  document.getElementById('pcSource').textContent = `📌 ${q.source}`;
+  const pcTextEl = document.getElementById('pcText');
+  if (q.html && q.html.trim()) {
+    pcTextEl.innerHTML = q.html;
+    if (window.MathJax) {
+      MathJax.typesetPromise([pcTextEl]);
+    }
+  } else {
+    pcTextEl.textContent = q.clean_text || q.text;
+  }
+
+  // Image placeholder
+  const imgArea = document.getElementById('pcImageArea');
+  if (q.imageFile) {
+    imgArea.style.display = 'block';
+    imgArea.innerHTML = `<img src="assets/${q.imageFile}" alt="配图" onerror="this.parentElement.innerHTML='<div class=\\'img-placeholder\\'>📷 配图加载失败</div>'">`;
+  } else {
+    imgArea.style.display = 'none';
+    imgArea.innerHTML = '';
+  }
+
+  // Reset reveal state
+  practiceRevealed = false;
+  document.getElementById('pcRevealBtn').textContent = '📝 查看解析与套路';
+  document.getElementById('pcDetail').classList.remove('revealed');
+
+  // Scroll to top
+  document.getElementById('practiceContent').scrollTop = 0;
+}
+
+function revealPractice() {
+  const q = practiceQuestions[practiceIndex];
+  if (!q) return;
+
+  practiceRevealed = true;
+
+  // Auto-mark as reviewed
+  reviewedIds.add(q.id);
+  saveReviewed();
+  document.getElementById('practiceBookmark').textContent = '★';
+  document.getElementById('practiceBookmark').classList.add('saved');
+  updateReviewBadge();
+
+  document.getElementById('pcRevealBtn').textContent = '🙈 收起';
+  document.getElementById('pcDetail').classList.add('revealed');
+
+  // Fill in detail sections — only show if content exists
+  const showSection = function(id, content) {
+    const el = document.getElementById(id);
+    const section = el ? el.closest('.pc-detail-section') : null;
+    if (content && content.trim()) {
+      el.innerHTML = escapeHtml(content);
+      if (section) section.style.display = '';
+    } else {
+      if (section) section.style.display = 'none';
+    }
+  };
+  showSection('pcStrategy', q.strategy);
+  showSection('pcPitfall', q.pitfalls);
+
+  const tagsHtml = q.tags && q.tags.length > 0 ? q.tags.map(t => `<span class="qb-tag">${escapeHtml(t)}</span>`).join(' ') : '';
+  const pcTagsEl = document.getElementById('pcTags');
+  const pcTagsSection = pcTagsEl ? pcTagsEl.closest('.pc-detail-section') : null;
+  if (tagsHtml) {
+    pcTagsEl.innerHTML = tagsHtml;
+    if (pcTagsSection) pcTagsSection.style.display = '';
+  } else {
+    if (pcTagsSection) pcTagsSection.style.display = 'none';
+  }
+
+  // Scroll to reveal content
+  setTimeout(() => {
+    document.getElementById('practiceContent').scrollTo({
+      top: document.getElementById('pcRevealBtn').offsetTop - 80,
+      behavior: 'smooth'
+    });
+  }, 100);
+}
+
+function toggleReveal() {
+  if (practiceRevealed) {
+    practiceRevealed = false;
+    document.getElementById('pcRevealBtn').textContent = '📝 查看解析与套路';
+    document.getElementById('pcDetail').classList.remove('revealed');
+  } else {
+    revealPractice();
+  }
+}
+
+function nextPractice() {
+  if (practiceIndex < practiceQuestions.length - 1) {
+    practiceIndex++;
+    renderPractice();
+  }
+}
+
+function prevPractice() {
+  if (practiceIndex > 0) {
+    practiceIndex--;
+    renderPractice();
+  }
+}
+
+function exitPractice() {
+  practiceMode = false;
+  document.getElementById('practicePage').classList.remove('active');
+  document.getElementById('donateBtn').style.display = '';
+  // Go back to where we were
+  if (currentPage === 'list' && currentCategory) {
+    document.getElementById('listPage').classList.add('active');
+  } else {
+    document.getElementById('homePage').classList.add('active');
+  }
+}
+
+function toggleBookmark() {
+  const q = practiceQuestions[practiceIndex];
+  if (!q) return;
+
+  if (reviewedIds.has(q.id)) {
+    reviewedIds.delete(q.id);
+  } else {
+    reviewedIds.add(q.id);
+  }
+  saveReviewed();
+  const isSaved = reviewedIds.has(q.id);
+  document.getElementById('practiceBookmark').textContent = isSaved ? '★' : '☆';
+  document.getElementById('practiceBookmark').classList.toggle('saved', isSaved);
+  updateReviewBadge();
+}
+
+// ======================== REVIEW PAGE ========================
+function openReview() {
+  document.getElementById('reviewPage').classList.add('active');
+  document.getElementById('homePage').classList.remove('active');
+  document.getElementById('listPage').classList.remove('active');
+  document.getElementById('backBtn').classList.remove('visible');
+  document.querySelector('.header').style.display = 'none';
+  document.getElementById('donateBtn').style.display = 'none';
+  renderReview();
+}
+
+function closeReview() {
+  document.getElementById('reviewPage').classList.remove('active');
+  document.querySelector('.header').style.display = '';
+  document.getElementById('donateBtn').style.display = '';
+  document.getElementById('homePage').classList.add('active');
+}
+
+function renderReview() {
+  const content = document.getElementById('reviewContent');
+
+  if (reviewedIds.size === 0) {
+    content.innerHTML = '<div class="review-empty"><div class="rv-empty-icon">📭</div><p>还没有看过题目，去刷几道吧</p></div>';
+    return;
+  }
+
+  // Collect all reviewed questions
+  const reviewed = [];
+  Object.keys(QUESTION_CATEGORIES).forEach(catKey => {
+    const cat = QUESTION_CATEGORIES[catKey];
+    cat.questions.forEach(q => {
+      if (reviewedIds.has(q.id)) {
+        reviewed.push({ ...q, catNum: cat.num, catLabel: cat.label });
+      }
+    });
+  });
+
+  if (reviewed.length === 0) {
+    // Some IDs may be from old data, clean up
+    reviewedIds.clear();
+    saveReviewed();
+    renderReview();
+    return;
+  }
+
+  content.innerHTML = `<div class="list-header">
+    <div class="list-cat-num">📚 已看题库</div>
+    <div class="list-cat-label">共 ${reviewed.length} 道题</div>
+  </div>` +
+  reviewed.map(q => {
+    const preview = q.text.length > 80 ? q.text.slice(0, 80) + '…' : q.text;
+    return `<div class="question-card" data-id="${q.id}">
+      <div class="qc-header">
+        <div class="qc-arrow">▶</div>
+        <div class="qc-info">
+          <div class="qc-source">#${q.catNum} ${escapeHtml(q.catLabel)} · ${escapeHtml(q.source)}</div>
+          <div class="qc-preview">${escapeHtml(preview)}</div>
+        </div>
+      </div>
+      <div class="qc-body">
+        <div class="qc-body-inner">
+          <div class="qb-section">
+            <div class="qb-label">📝 题目</div>
+            <div class="qb-text">${q.html ? q.html : escapeHtml(q.clean_text || q.text)}</div>
+          </div>
+          <div class="qb-section">
+            <div class="qb-label">🏷️ 套路标签</div>
+            <div class="qb-tags">${(q.tags || []).map(t => `<span class="qb-tag">${escapeHtml(t)}</span>`).join('')}</div>
+          </div>
+          ${q.pitfalls ? `<div class="qb-section">
+            <div class="qb-label">⚠️ 易错点</div>
+            <div class="qb-pitfall">${escapeHtml(q.pitfalls)}</div>
+          </div>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+
+  // Expand/collapse in review
+  content.querySelectorAll('.qc-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const card = header.closest('.question-card');
+      const body = card.querySelector('.qc-body');
+      const arrow = card.querySelector('.qc-arrow');
+      body.classList.toggle('open');
+      arrow.classList.toggle('open');
+    });
+  });
+}
+
+function clearReview() {
+  if (reviewedIds.size === 0) return;
+  if (confirm('确定清空所有已看记录吗？')) {
+    reviewedIds.clear();
+    saveReviewed();
+    renderReview();
+    updateReviewBadge();
+  }
+}
+
+function updateReviewBadge() {
+  document.getElementById('reviewCountBadge').textContent = reviewedIds.size;
+}
+
+// ======================== RANDOM PRACTICE ========================
+function startRandomPractice() {
+  const catKeys = Object.keys(QUESTION_CATEGORIES);
+  const randomCat = catKeys[Math.floor(Math.random() * catKeys.length)];
+  startPractice(randomCat, null);
+}
+
+// ======================== DONATE MODAL ========================
+const donateBtn = document.getElementById('donateBtn');
+const donateModal = document.getElementById('donateModal');
+const donateClose = document.getElementById('donateClose');
+
+donateBtn.addEventListener('click', () => {
+  donateModal.classList.add('visible');
+});
+
+function closeDonate() {
+  donateModal.classList.remove('visible');
+}
+donateClose.addEventListener('click', closeDonate);
+donateModal.addEventListener('click', (e) => {
+  if (e.target === donateModal) closeDonate();
+});
+
+// ======================== EVENT BINDINGS ========================
+document.getElementById('backBtn').addEventListener('click', goHome);
+
+// Mode toggle → review
+document.getElementById('modeToggle').addEventListener('click', openReview);
+
+// Bottom actions
+document.getElementById('bottomPractice').addEventListener('click', startRandomPractice);
+document.getElementById('bottomReview').addEventListener('click', openReview);
+
+// List page actions
+document.getElementById('listPracticeBtn').addEventListener('click', () => {
+  if (currentCategory) startPractice(currentCategory, null);
+});
+document.getElementById('listHomeBtn').addEventListener('click', goHome);
+
+// Practice page — 返回
+function doPracticeBack(toHome) {
+  practiceMode = false;
+  document.getElementById('practicePage').classList.remove('active');
+  // Restore main header
+  document.querySelector('.header').style.display = '';
+  document.getElementById('donateBtn').style.display = '';
+
+  if (toHome || practiceReturnTo === 'home') {
+    goHome();
+  } else {
+    // practiceReturnTo === 'list'
+    document.getElementById('listPage').classList.add('active');
+    currentPage = 'list';
+    document.getElementById('backBtn').classList.add('visible');
+  }
+}
+
+document.getElementById('practiceBack').addEventListener('click', () => doPracticeBack(false));
+document.getElementById('practiceHomeBtn').addEventListener('click', () => doPracticeBack(true));
+document.getElementById('pcRevealBtn').addEventListener('click', toggleReveal);
+document.getElementById('pbNext').addEventListener('click', nextPractice);
+document.getElementById('pbPrev').addEventListener('click', prevPractice);
+document.getElementById('practiceBookmark').addEventListener('click', toggleBookmark);
+
+// Review page
+document.getElementById('reviewBack').addEventListener('click', closeReview);
+document.getElementById('reviewClear').addEventListener('click', clearReview);
+
+// Tag search with debounce
+let searchTimer = null;
+document.getElementById('tagSearch').addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    performTagSearch(document.getElementById('tagSearch').value);
+  }, 200);
+});
+
+// Keyboard shortcuts in practice mode
+document.addEventListener('keydown', (e) => {
+  if (!practiceMode) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') {
+    e.preventDefault();
+    if (practiceRevealed) {
+      nextPractice();
+    } else {
+      revealPractice();
+    }
+  }
+  if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    prevPractice();
+  }
+  if (e.key === 'r' || e.key === 'R') {
+    e.preventDefault();
+    toggleReveal();
+  }
+});
+
+// ======================== INIT ========================
+
+</script>
+
+</body>
+</html>
