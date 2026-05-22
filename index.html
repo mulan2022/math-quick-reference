@@ -1167,8 +1167,43 @@ MathJax = {
 </div>
 
 <!-- Load questions data from external file (avoids 10MB+ inline data) -->
-<script src="questions_data.js"></script>
+<script src="data/data-index.js"></script>
 <script>
+// ======================== LAZY DATA LOADER ========================
+const _loadedCats = {};
+const _loadingCats = {};
+
+function loadCat(num) {
+  if (_loadedCats[num]) return Promise.resolve(_loadedCats[num]);
+  if (_loadingCats[num]) return _loadingCats[num];
+  _loadingCats[num] = new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'data/data-' + num + '.js';
+    s.onload = () => {
+      const key = 'CAT_DATA_' + num;
+      const cat = window[key][num];
+      _loadedCats[num] = cat;
+      delete _loadingCats[num];
+      resolve(cat);
+    };
+    s.onerror = () => {
+      delete _loadingCats[num];
+      reject(new Error('Failed to load category ' + num));
+    };
+    document.head.appendChild(s);
+  });
+  return _loadingCats[num];
+}
+
+function getLoadedCat(num) {
+  return _loadedCats[num] || null;
+}
+
+function catCount(num) {
+  const meta = DATA_INDEX.qmeta[num];
+  return meta ? meta.length : 0;
+}
+
 // ======================== LOCAL STATE ========================
 const REVIEWED_KEY = 'math_reviewed_ids';
 let reviewedIds = new Set();
@@ -1240,7 +1275,10 @@ function goToCategory(num) {
   document.getElementById('listPage').classList.add('active');
   document.getElementById('practicePage').classList.remove('active');
   document.getElementById('backBtn').style.display = '';
-  renderList();
+  document.getElementById('listPage').innerHTML = '<div class="loading-spinner" style="text-align:center;padding:60px 0;color:var(--text-tertiary);font-size:14px"><div style="font-size:32px;margin-bottom:12px">⏳</div>加载中...</div>';
+  loadCat(num).then(renderList).catch(() => {
+    document.getElementById('listPage').innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--danger)">加载失败，请刷新重试</div>';
+  });
 }
 
 renderHome();
@@ -1250,12 +1288,13 @@ function renderHome() {
   const grid = document.getElementById('categoryGrid');
   const catOrder = ['19','20','21','22','1718','24','25'];
   grid.innerHTML = catOrder.map(num => {
-    const cat = QUESTION_CATEGORIES[num];
-    if (!cat) return '';
+    const meta = DATA_INDEX.categories[num];
+    if (!meta) return '';
+    const cnt = catCount(num);
     return `<div class="category-card" data-category="${num}">
-      <div class="cat-num">#${cat.num}</div>
-      <div class="cat-label">${escapeHtml(cat.label)}</div>
-      <div class="cat-count">${cat.questions.length} 题</div>
+      <div class="cat-num">#${meta.num}</div>
+      <div class="cat-label">${escapeHtml(meta.label)}</div>
+      <div class="cat-count">${cnt} 题</div>
     </div>`;
   }).join('');
 
@@ -1278,13 +1317,15 @@ function performTagSearch(query) {
   const q = query.trim().toLowerCase();
   const matches = [];
 
-  Object.keys(QUESTION_CATEGORIES).forEach(num => {
-    const cat = QUESTION_CATEGORIES[num];
-    cat.questions.forEach(qs => {
+  // Search against lightweight index (no need to load full categories)
+  Object.keys(DATA_INDEX.qmeta).forEach(num => {
+    const catLabel = DATA_INDEX.categories[num] ? DATA_INDEX.categories[num].label : '';
+    DATA_INDEX.qmeta[num].forEach(qs => {
       const tagMatch = qs.tags && qs.tags.some(t => t.toLowerCase().includes(q));
-      const textMatch = qs.text.toLowerCase().includes(q);
-      if (tagMatch || textMatch) {
-        matches.push({ ...qs, catNum: num, catLabel: cat.label });
+      const textMatch = qs.text && qs.text.toLowerCase().includes(q);
+      const srcMatch = qs.source && qs.source.toLowerCase().includes(q);
+      if (tagMatch || textMatch || srcMatch) {
+        matches.push({ ...qs, catNum: num, catLabel: catLabel });
       }
     });
   });
@@ -1328,7 +1369,7 @@ function performTagSearch(query) {
 
 // ======================== LIST PAGE ========================
 function renderList() {
-  const cat = QUESTION_CATEGORIES[currentCategory];
+  const cat = getLoadedCat(currentCategory);
   if (!cat) { goHome(); return; }
 
   document.getElementById('listCatNum').textContent = '#' + cat.num + ' ' + cat.label;
@@ -1353,7 +1394,7 @@ function renderList() {
 }
 
 function renderQuestionList(filterTag) {
-  const cat = QUESTION_CATEGORIES[currentCategory];
+  const cat = getLoadedCat(currentCategory);
   if (!cat) return;
 
   let questions = cat.questions;
@@ -1445,8 +1486,11 @@ function renderQuestionList(filterTag) {
 
 // ======================== PRACTICE MODE ========================
 function startPractice(catKey, startId) {
-  const cat = QUESTION_CATEGORIES[catKey];
-  if (!cat) return;
+  const cat = getLoadedCat(catKey);
+  if (!cat) {
+    loadCat(catKey).then(() => startPractice(catKey, startId));
+    return;
+  }
 
   practiceMode = true;
   practiceCategory = catKey;
@@ -1475,7 +1519,7 @@ function renderPractice() {
   const q = practiceQuestions[practiceIndex];
   if (!q) return;
 
-  const cat = QUESTION_CATEGORIES[practiceCategory];
+  const cat = getLoadedCat(practiceCategory);
   const totalQ = cat ? cat.questions.length : practiceQuestions.length;
 
   // Header
@@ -1648,10 +1692,19 @@ function renderReview() {
     return;
   }
 
+  // Load any missing categories first
+  const catsToLoad = Object.keys(DATA_INDEX.categories).filter(k => !getLoadedCat(k));
+  if (catsToLoad.length > 0) {
+    content.innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--text-tertiary);font-size:14px"><div style="font-size:32px;margin-bottom:12px">⏳</div>加载题库数据...</div>';
+    Promise.all(catsToLoad.map(k => loadCat(k))).then(renderReview);
+    return;
+  }
+
   // Collect all reviewed questions
   const reviewed = [];
-  Object.keys(QUESTION_CATEGORIES).forEach(catKey => {
-    const cat = QUESTION_CATEGORIES[catKey];
+  Object.keys(DATA_INDEX.categories).forEach(catKey => {
+    const cat = getLoadedCat(catKey);
+    if (!cat) return;
     cat.questions.forEach(q => {
       if (reviewedIds.has(q.id)) {
         reviewed.push({ ...q, catNum: cat.num, catLabel: cat.label });
@@ -1729,9 +1782,14 @@ function updateReviewBadge() {
 
 // ======================== RANDOM PRACTICE ========================
 function startRandomPractice() {
-  const catKeys = Object.keys(QUESTION_CATEGORIES);
+  const catKeys = Object.keys(DATA_INDEX.categories);
   const randomCat = catKeys[Math.floor(Math.random() * catKeys.length)];
-  startPractice(randomCat, null);
+  const cat = getLoadedCat(randomCat);
+  if (cat) {
+    startPractice(randomCat, null);
+  } else {
+    loadCat(randomCat).then(() => startPractice(randomCat, null));
+  }
 }
 
 // ======================== DONATE MODAL ========================
