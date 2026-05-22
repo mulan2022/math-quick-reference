@@ -1188,22 +1188,20 @@ const _loadingCats = {};
 function loadCat(num) {
   if (_loadedCats[num]) return Promise.resolve(_loadedCats[num]);
   if (_loadingCats[num]) return _loadingCats[num];
-  _loadingCats[num] = new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = 'data/data-' + num + '.js';
-    s.onload = () => {
-      const key = 'CAT_DATA_' + num;
-      const cat = window[key][num];
+  _loadingCats[num] = fetch('data/data-' + num + '.js')
+    .then(r => r.text())
+    .then(js => {
+      // Evaluate the JS in global scope to get CAT_DATA_XX
+      const fn = new Function(js + '\nreturn CAT_DATA_' + num + ';');
+      const data = fn();
+      const cat = data[num];
       _loadedCats[num] = cat;
+      return cat;
+    })
+    .catch(e => {
       delete _loadingCats[num];
-      resolve(cat);
-    };
-    s.onerror = () => {
-      delete _loadingCats[num];
-      reject(new Error('Failed to load category ' + num));
-    };
-    document.head.appendChild(s);
-  });
+      throw new Error('Failed to load category ' + num + ': ' + e.message);
+    });
   return _loadingCats[num];
 }
 
