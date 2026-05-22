@@ -1182,31 +1182,39 @@ MathJax = {
 <script src="data/data-index.js"></script>
 <script>
 // ======================== LAZY DATA LOADER ========================
-const _loadedCats = {};
-const _loadingCats = {};
+const _catCache = {};
+const _catLoads = {};
+
+// Called by each data/data-XX.js file when loaded
+function _regCat(num, data) {
+  _catCache[num] = data[num];
+}
 
 function loadCat(num) {
-  if (_loadedCats[num]) return Promise.resolve(_loadedCats[num]);
-  if (_loadingCats[num]) return _loadingCats[num];
-  _loadingCats[num] = fetch('data/data-' + num + '.js')
-    .then(r => r.text())
-    .then(js => {
-      // Evaluate the JS in global scope to get CAT_DATA_XX
-      const fn = new Function(js + '\nreturn CAT_DATA_' + num + ';');
-      const data = fn();
-      const cat = data[num];
-      _loadedCats[num] = cat;
-      return cat;
-    })
-    .catch(e => {
-      delete _loadingCats[num];
-      throw new Error('Failed to load category ' + num + ': ' + e.message);
-    });
-  return _loadingCats[num];
+  if (_catCache[num]) return Promise.resolve(_catCache[num]);
+  if (_catLoads[num]) return _catLoads[num];
+  _catLoads[num] = new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'data/data-' + num + '.js';
+    s.onload = () => {
+      const cat = _catCache[num];
+      if (cat) {
+        resolve(cat);
+      } else {
+        reject(new Error('Category ' + num + ' data not found'));
+      }
+    };
+    s.onerror = () => {
+      delete _catLoads[num];
+      reject(new Error('Failed to load category ' + num));
+    };
+    document.head.appendChild(s);
+  });
+  return _catLoads[num];
 }
 
 function getLoadedCat(num) {
-  return _loadedCats[num] || null;
+  return _catCache[num] || null;
 }
 
 function catCount(num) {
