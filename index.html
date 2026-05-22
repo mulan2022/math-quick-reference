@@ -1115,6 +1115,18 @@ MathJax = {
         <div class="ds-body" id="pcStrategy"></div>
       </div>
 
+      <div class="pc-detail-section answer-section" id="pcAnswerSection">
+        <div class="ds-icon">✅</div>
+        <div class="ds-label">参考答案</div>
+        <div class="ds-body" id="pcAnswer"></div>
+      </div>
+
+      <div class="pc-detail-section" id="pcExplanationSection">
+        <div class="ds-icon">📖</div>
+        <div class="ds-label">解析</div>
+        <div class="ds-body" id="pcExplanation"></div>
+      </div>
+
       <div class="pc-detail-section pitfall-section" id="pcPitfallSection">
         <div class="ds-icon">⚠️</div>
         <div class="ds-label">易错点分析</div>
@@ -1431,6 +1443,17 @@ function renderQuestionList(filterTag) {
               ${(q.tags || []).map(t => `<span class="qb-tag" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</span>`).join('')}
             </div>
           </div>
+          ${q.answer ? `<div class="qb-section">
+            <div class="qb-label">✅ 参考答案</div>
+            <div class="qb-answer-wrap">
+              <button class="qb-answer-toggle" onclick="this.nextElementSibling.classList.toggle('hidden');this.textContent=this.nextElementSibling.classList.contains('hidden')?'✅ 显示答案':'🙈 隐藏答案'">✅ 显示答案</button>
+              <div class="qb-answer hidden">${escapeHtml(q.answer)}</div>
+            </div>
+          </div>` : ''}
+          ${q.explanation ? `<div class="qb-section">
+            <div class="qb-label">📖 解析</div>
+            <div class="qb-text">${escapeHtml(q.explanation)}</div>
+          </div>` : ''}
           ${q.pitfalls ? `<div class="qb-section">
             <div class="qb-label">⚠️ 易错点</div>
             <div class="qb-pitfall">${escapeHtml(q.pitfalls)}</div>
@@ -1592,6 +1615,20 @@ function revealPractice() {
       if (section) section.style.display = 'none';
     }
   };
+  // Show answer and explanation
+  const showAnswer = function(id, content) {
+    const el = document.getElementById(id);
+    const section = el ? el.closest('.pc-detail-section') : null;
+    if (content && content.trim()) {
+      el.textContent = content;
+      if (section) section.style.display = '';
+    } else {
+      if (section) section.style.display = 'none';
+    }
+  };
+  showAnswer('pcAnswer', q.answer);
+  showAnswer('pcExplanation', q.explanation);
+
   showSection('pcStrategy', q.strategy);
   showSection('pcPitfall', q.pitfalls);
 
